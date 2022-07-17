@@ -48,11 +48,11 @@ const item3 = new Item({
 const defaultItems = [item1, item2, item3]
 
 // INSERT MANY = MONGOOSE
-Item.insertMany(defaultItems, function(error, docs) {
-    if(error){
-        console.log(error);
+Item.insertMany(defaultItems, function(err) {
+    if(err){
+        console.log(err);
       }else{
-        console.log("Succesfully saved default items to DB.");
+        console.log("Successfully saved default items to DB.");
       }
 });
 
