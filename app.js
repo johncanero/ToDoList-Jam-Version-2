@@ -3,11 +3,13 @@
 // essentials
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const date = require(__dirname+"/date.js");
 
 
 const app = express();
-// DELETE ARRAY
+// DELETE ARRAY ITEMS
+
 
 // SET - UP view: EJS
 app.set("view engine", "ejs");
