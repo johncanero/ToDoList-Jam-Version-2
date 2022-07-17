@@ -7,8 +7,7 @@ const date = require(__dirname+"/date.js");
 
 
 const app = express();
-const items = ["Show Your Work!"];
-const workItems = [];
+// DELETE ARRAY
 
 // SET - UP view: EJS
 app.set("view engine", "ejs");
