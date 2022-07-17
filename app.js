@@ -44,8 +44,11 @@ const item3 = new Item({
   name: "Click Checkbox to Delete Item.",
 });
 
+
 // ARRAY (MONGO ITEMS)
 const defaultItems = [item1, item2, item3]
+
+
 
 // INSERT MANY = MONGOOSE
 Item.insertMany(defaultItems, function(err) {
