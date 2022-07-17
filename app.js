@@ -19,7 +19,6 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost:27017/todolistDB", {
   useUnifiedTopology: true,
   useNewUrlParser: true,
-  useFindAndModify: false,
 });
 
 // ITEMS SCHEMA - MONGOOSE
