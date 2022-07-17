@@ -33,16 +33,19 @@ const Item = mongoose.model("Item", itemsSchema);
 
 // MONGO ITEMS
 const item1 = new Item({
-  name: "Welcome to your ToDoList-Jam!",
+  name: "Welcome to ToDoList!",
 });
 
 const item2 = new Item({
-  name: "Tap + button to add an item.",
+  name: "Tap + Button to Add an Item.",
 });
 
 const item3 = new Item({
-  name: "click checkbox to delete item.",
+  name: "Click Checkbox to Delete Item.",
 });
+
+// ARRAY (MONGO ITEMS)
+const defaultItems = [item1, item2, item3]
 
 
 // GET function for home route = mongoDB
