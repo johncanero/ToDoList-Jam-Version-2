@@ -47,6 +47,15 @@ const item3 = new Item({
 // ARRAY (MONGO ITEMS)
 const defaultItems = [item1, item2, item3]
 
+// INSERT MANY = MONGOOSE
+Item.insertMany(defaultItems, function(error, docs) {
+    if(error){
+        console.log(error);
+      }else{
+        console.log("Succesfully saved default items to DB.");
+      }
+});
+
 
 // GET function for home route = mongoDB
 app.get("/", function (req, res) {
