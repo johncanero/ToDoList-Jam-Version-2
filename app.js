@@ -17,6 +17,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 // public > css (styles)
 app.use(express.static("public")); 
 
+// MONGOOSE CONNECT
+mongoose.connect("mongodb://localhost:27017/todolistDB", {useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false});
+
 
 // GET function for home route
 app.get ("/", function(req, res){
