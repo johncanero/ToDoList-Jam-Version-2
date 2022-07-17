@@ -1,0 +1,40 @@
+<!-- Include Views  -->
+<%- include("header") -%>
+   
+    <!-- Re-using the class styles: box -->
+    <div class="flex-container1">
+      <img class="toDoListIcon" src="images/toDoListIcon.png" alt="toDoListIcon.png">
+    </div>
+
+    
+    <div class="boxMargin">
+      <div class ="box" id="heading">
+        <h1> <%=listTitle %></h1>
+      </div>
+  
+      <div class ="box">
+        <% for (let i =0 ; i<newListItems.length; i++){ %>
+          <div class ="item">
+          <input type="checkbox" />
+  
+            <p><%= newListItems[i]%> </p>
+          </div>
+  
+          <% } %>
+          <form class ="item" action ="/" method = "post">
+            <!-- autocomplete to remove auto-suggestion -->
+            <input type ="text" name ="newItem" placeholder = "New Item" autocomplete = "off" autofocus ="true"/>
+            <button type = "submit" name = "list" value = "<%= listTitle%>">+</button>
+          </form>
+      </div>
+    </div>
+
+
+    <%# This tag comes from EJS Template%>
+    <%# https://ejs.co/#docs%>
+    <%# look at the Tags section%>
+
+<%- include("footer") -%>
+
+
+
