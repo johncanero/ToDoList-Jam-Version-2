@@ -4,6 +4,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const _= require("lodash");
+
 const date = require(__dirname + "/date.js");
 
 const app = express();
@@ -31,15 +33,15 @@ const Item = mongoose.model("Item", itemScheme);
 const item1 = new Item({
   name: "Welcome to ToDoList!",
 });
-const item2 = new Item({
-  name: "Hit + Button to Add an Item.",
-});
-const item3 = new Item({
-  name: "Click Checkbox to Delete Item.",
-});
+// const item2 = new Item({
+//   name: "Hit + Button to Add an Item.",
+// });
+// const item3 = new Item({
+//   name: "Click Checkbox to Delete Item.",
+// });
 
 // ARRAY (MONGO ITEMS)
-const defautItems = [item1, item2, item3];
+const defautItems = [item1];
 
 // LIST SCHEMA
 const listSchema = {
@@ -104,6 +106,7 @@ app.post("/delete", function (req, res) {
     });
   } else {
     List.findOneAndUpdate(
+      // PULL ERROR
       { name: listName },
       { $pull: { items: { _id: checkedItemId } } },
       function (err, foundList) {
@@ -118,7 +121,7 @@ app.post("/delete", function (req, res) {
 // EXPRESS ROUTE PARAMETERS = CUSTOM LIST NAME
 app.get("/:customListName", function(req, res){
 
-  const customListName = req.params.customListName;
+  const customListName = _.capitalize(req.params.customListName);
 
   List.findOne({name: customListName}, function(err, foundList){
     if(!err){
