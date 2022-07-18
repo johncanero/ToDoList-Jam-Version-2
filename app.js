@@ -29,7 +29,6 @@ const itemsSchema = {
 // MONGOOSE MODEL
 const Item = mongoose.model("Item", itemsSchema);
 
-
 // MONGO ITEMS
 const item1 = new Item({
   name: "Welcome to ToDoList!",
@@ -43,26 +42,27 @@ const item3 = new Item({
   name: "Click Checkbox to Delete Item.",
 });
 
-
 // ARRAY (MONGO ITEMS)
-const defaultItems = [item1, item2, item3]
-
-
+const defaultItems = [item1, item2, item3];
 
 // INSERT MANY = MONGOOSE
-Item.insertMany(defaultItems, function(err) {
-    if(err){
-        console.log(err);
-      }else{
-        console.log("Successfully saved default items to DB.");
-      }
+Item.insertMany(defaultItems, function (err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("Successfully saved default items to DB.");
+  }
 });
-
 
 // GET function for home route = mongoDB
 app.get("/", function (req, res) {
-  res.render("list", { listTitle: "Today", newListItems: items });
+
+  Item.find({}, function (err, foundItems) {
+    res.render("list", { listTitle: "Today", newListItems: foundItems });
+  });
 });
+
+
 
 // POST function for home route
 app.post("/", function (req, res) {
