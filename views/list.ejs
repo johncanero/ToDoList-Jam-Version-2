@@ -1,6 +1,7 @@
 <!-- Include Views  -->
 <%- include("header") -%>
    
+    
     <!-- Re-using the class styles: box -->
     <div class="flex-container1">
       <img class="toDoListIcon" src="images/toDoListIcon.png" alt="toDoListIcon.png">
@@ -8,6 +9,9 @@
 
     
     <div class="boxMargin">
+      <div class="box" id="heading">
+        <h1> <%= listTitle %> </h1>
+      </div>
       <div class="box">
         <% newListItems.forEach(item => {%>
           <form action="/delete" method="post">

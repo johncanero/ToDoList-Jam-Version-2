@@ -20,12 +20,12 @@ mongoose.connect("mongodb://localhost:27017/todolistDB", {
 });
 
 // ITEMS SCHEMA - MONGOOSE
-const itemsSchema = {
+const itemScheme = mongoose.Schema({
   name: String,
-};
+});
 
 // MONGOOSE MODEL
-const Item = mongoose.model("Item", itemsSchema);
+const Item = mongoose.model("Item", itemScheme);
 
 // MONGO ITEMS
 const item1 = new Item({
@@ -41,83 +41,103 @@ const item3 = new Item({
 // ARRAY (MONGO ITEMS)
 const defautItems = [item1, item2, item3];
 
+// LIST SCHEMA
+const listSchema = {
+  name: String,
+  items: [itemScheme]
+};
 
-
+const List = mongoose.model("List", listSchema);
 
 // GET function for home route = mongoDB
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
   const day = date.getDate();
 
-  Item.find({}, function(err, foundItems){
-    if(foundItems.length === 0){
-      Item.insertMany(defautItems, function(error){
-        if(error){
+  Item.find({}, function (err, foundItems) {
+    if (foundItems.length === 0) {
+      Item.insertMany(defautItems, function (error) {
+        if (error) {
           console.log(error);
-        }else{
+        } else {
           console.log("Succesfully saved default items to DB.");
         }
       });
-      res.redirect('/');
-    }else{
-      res.render("list", {listTitle: day, newListItems: foundItems});
+      res.redirect("/");
+    } else {
+      res.render("list", { listTitle: day, newListItems: foundItems });
     }
-
   });
 });
 
 
 // POST function for home route
-app.post("/", function(req, res){
-
+app.post("/", function (req, res) {
   const day = date.getDate();
   const itemName = req.body.newItem;
   const listName = req.body.list;
-  const item = new Item({name: itemName});
+  const item = new Item({ name: itemName });
 
-  if(listName === day){
+  if (listName === day) {
     item.save();
     res.redirect("/");
-  }else{
-    List.findOne({name: listName}, function(err, foundList){
+  } else {
+    List.findOne({ name: listName }, function (err, foundList) {
       foundList.items.push(item);
       foundList.save();
     });
-    res.redirect("/"+listName);
-
+    res.redirect("/" + listName);
   }
 });
 
-
-
 // POST DELETE
-app.post('/delete', function(req, res){
-
+app.post("/delete", function (req, res) {
   const day = date.getDate();
   const checkedItemId = req.body.checkboxId;
   const listName = req.body.listName;
 
-  if(listName === day){
-    Item.deleteOne({_id: checkedItemId}, function(err){
-      if(!err){ 
+  if (listName === day) {
+    Item.deleteOne({ _id: checkedItemId }, function (err) {
+      if (!err) {
         console.log("Succesfully deleted.");
-        res.redirect('/');
+        res.redirect("/");
       }
     });
-  }else{
-    List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}, function(err,foundList){
-      if(!err){
-        res.redirect('/'+listName);
+  } else {
+    List.findOneAndUpdate(
+      { name: listName },
+      { $pull: { items: { _id: checkedItemId } } },
+      function (err, foundList) {
+        if (!err) {
+          res.redirect("/" + listName);
+        }
       }
-    });
+    );
   }
 });
 
+// EXPRESS ROUTE PARAMETERS
+app.get('/:customListName', function(req, res){
 
+  const customListName = _.capitalize(req.params.customListName);
 
-// GET function for work route
-app.get("/work", function (req, res) {
-  res.render("list", { listTitle: "Work list", newListItems: workItems });
+  List.findOne({name: customListName}, function(err, foundList){
+    if(!err){
+      if(!foundList){
+        const list = new List({name: customListName, items: defautItems});
+        list.save();
+        res.redirect('/'+customListName);
+      }else{
+        res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+      }
+    }
+  });
 });
+
+
+
+
+
+
 
 // POST function for work route
 app.post("/work", function (req, res) {
@@ -135,5 +155,3 @@ app.get("/about", function (req, res) {
 app.listen(process.env.PORT || 3000, function () {
   console.log("Server is running on port 3000");
 });
-
-
