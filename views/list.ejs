@@ -8,20 +8,18 @@
 
     
     <div class="boxMargin">
-      <div class ="box" id="heading">
-        <h1> <%=listTitle %></h1>
-      </div>
-  
-      <div class ="box">
-        <% for (let i =0 ; i<newListItems.length; i++){ %>
-          <div class ="item">
-          <input type="checkbox" />
-            
-          <!-- NAME FIELD OF EACH ITEM -->
-            <p><%= newListItems[i].name %> </p>
-          </div>
-  
-          <% } %>
+      <div class="box">
+        <!-- FOR EACH LOOP -->
+        <% newListItems.forEach(item => {%>
+          <form action="/delete" method="post">
+            <div class="item">
+              <input type="checkbox" name="checkboxId" value="<%=item._id%>" onChange="this.form.submit()">
+              <input type="hidden" name="listName" value="<%= listTitle %>">
+              <p><%=  item.name %></p>
+            </div>
+          </form>
+      <% }); %>
+
           <form class ="item" action ="/" method = "post">
             <!-- autocomplete to remove auto-suggestion -->
             <input type ="text" name ="newItem" placeholder = "New Item" autocomplete = "off" autofocus ="true"/>
