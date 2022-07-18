@@ -9,7 +9,6 @@
     
     <div class="boxMargin">
       <div class="box">
-        <!-- FOR EACH LOOP -->
         <% newListItems.forEach(item => {%>
           <form action="/delete" method="post">
             <div class="item">
@@ -19,11 +18,10 @@
             </div>
           </form>
       <% }); %>
-
-          <form class ="item" action ="/" method = "post">
-            <!-- autocomplete to remove auto-suggestion -->
-            <input type ="text" name ="newItem" placeholder = "New Item" autocomplete = "off" autofocus ="true"/>
-            <button type = "submit" name = "list" value = "<%= listTitle%>">+</button>
+    
+          <form class="item" action="/" method="post">
+            <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+            <button type="submit" name="list" value="<%= listTitle %>">+</button>
           </form>
       </div>
     </div>

@@ -139,7 +139,8 @@ input[type="checkbox"] {
   margin: 20px;
 }
 
-form {
+/* FORM STRICT = form.item */
+form.item {
   text-align: center;
   margin-left: 20px;
 }

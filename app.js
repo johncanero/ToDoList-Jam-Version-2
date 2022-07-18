@@ -7,12 +7,10 @@ const mongoose = require("mongoose");
 const date = require(__dirname + "/date.js");
 
 const app = express();
-// DELETE ARRAY ITEMS
 
-// SET - UP view: EJS
 app.set("view engine", "ejs");
+
 app.use(bodyParser.urlencoded({ extended: true }));
-// PUBLIC > CSS AND IMAGES
 app.use(express.static("public"));
 
 // MONGOOSE CONNECT
@@ -33,56 +31,88 @@ const Item = mongoose.model("Item", itemsSchema);
 const item1 = new Item({
   name: "Welcome to ToDoList!",
 });
-
 const item2 = new Item({
   name: "Hit + Button to Add an Item.",
 });
-
 const item3 = new Item({
   name: "Click Checkbox to Delete Item.",
 });
 
 // ARRAY (MONGO ITEMS)
-const defaultItems = [item1, item2, item3];
+const defautItems = [item1, item2, item3];
+
+
+
 
 // GET function for home route = mongoDB
-app.get("/", function (req, res) {
-  Item.find({}, function (err, foundItems) {
-    // IF STATEMENT
-    if (foundItems.length === 0) {
-      // INSERT MANY = MONGOOSE
-      Item.insertMany(defaultItems, function (err) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("Successfully saved default items to DB.");
+app.get("/", function(req, res) {
+  const day = date.getDate();
+
+  Item.find({}, function(err, foundItems){
+    if(foundItems.length === 0){
+      Item.insertMany(defautItems, function(error){
+        if(error){
+          console.log(error);
+        }else{
+          console.log("Succesfully saved default items to DB.");
         }
       });
-      res.redirect("/");
-    } else {
-      res.render("list", { listTitle: "Today", newListItems: foundItems });
+      res.redirect('/');
+    }else{
+      res.render("list", {listTitle: day, newListItems: foundItems});
     }
+
   });
 });
 
 
-
-
 // POST function for home route
-app.post("/", function (req, res) {
-  // console.log(req.body);
-  const item = req.body.newItem;
+app.post("/", function(req, res){
 
-  // pushing work items list (work route)
-  if (req.body.list === "Work list") {
-    workItems.push(item);
-    res.redirect("/work");
-    // pushing home route
-  } else {
-    items.push(item);
+  const day = date.getDate();
+  const itemName = req.body.newItem;
+  const listName = req.body.list;
+  const item = new Item({name: itemName});
+
+  if(listName === day){
+    item.save();
     res.redirect("/");
+  }else{
+    List.findOne({name: listName}, function(err, foundList){
+      foundList.items.push(item);
+      foundList.save();
+    });
+    res.redirect("/"+listName);
+
   }
 });
+
+
+
+// POST DELETE
+app.post('/delete', function(req, res){
+
+  const day = date.getDate();
+  const checkedItemId = req.body.checkboxId;
+  const listName = req.body.listName;
+
+  if(listName === day){
+    Item.deleteOne({_id: checkedItemId}, function(err){
+      if(!err){ 
+        console.log("Succesfully deleted.");
+        res.redirect('/');
+      }
+    });
+  }else{
+    List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}, function(err,foundList){
+      if(!err){
+        res.redirect('/'+listName);
+      }
+    });
+  }
+});
+
+
 
 // GET function for work route
 app.get("/work", function (req, res) {
@@ -105,3 +135,5 @@ app.get("/about", function (req, res) {
 app.listen(process.env.PORT || 3000, function () {
   console.log("Server is running on port 3000");
 });
+
+
