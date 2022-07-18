@@ -35,7 +35,7 @@ const item1 = new Item({
 });
 
 const item2 = new Item({
-  name: "Tap + Button to Add an Item.",
+  name: "Hit + Button to Add an Item.",
 });
 
 const item3 = new Item({
@@ -45,22 +45,26 @@ const item3 = new Item({
 // ARRAY (MONGO ITEMS)
 const defaultItems = [item1, item2, item3];
 
-// INSERT MANY = MONGOOSE
-Item.insertMany(defaultItems, function (err) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log("Successfully saved default items to DB.");
-  }
-});
-
 // GET function for home route = mongoDB
 app.get("/", function (req, res) {
-
   Item.find({}, function (err, foundItems) {
-    res.render("list", { listTitle: "Today", newListItems: foundItems });
+    // IF STATEMENT
+    if (foundItems.length === 0) {
+      // INSERT MANY = MONGOOSE
+      Item.insertMany(defaultItems, function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Successfully saved default items to DB.");
+        }
+      });
+      res.redirect("/");
+    } else {
+      res.render("list", { listTitle: "Today", newListItems: foundItems });
+    }
   });
 });
+
 
 
 
