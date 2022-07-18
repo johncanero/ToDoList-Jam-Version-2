@@ -115,17 +115,20 @@ app.post("/delete", function (req, res) {
   }
 });
 
-// EXPRESS ROUTE PARAMETERS
-app.get('/:customListName', function(req, res){
+// EXPRESS ROUTE PARAMETERS = CUSTOM LIST NAME
+app.get("/:customListName", function(req, res){
 
-  const customListName = _.capitalize(req.params.customListName);
+  const customListName = req.params.customListName;
 
   List.findOne({name: customListName}, function(err, foundList){
     if(!err){
       if(!foundList){
-        const list = new List({name: customListName, items: defautItems});
+        const list = new List({
+          name: customListName, 
+          items: defautItems
+        });
         list.save();
-        res.redirect('/'+customListName);
+        res.redirect("/" + customListName);
       }else{
         res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
       }
