@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // MONGOOSE CONNECT
-mongoose.connect("mongodb+srv://admin-john:test123@cluster0.aribk.mongodb.net/todolistDB", {
+mongoose.connect("mongodb+srv://admin-john:test123@cluster0.aribk.mongodb.net/?retryWrites=true&w=majority/todolistDB", {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
@@ -118,8 +118,6 @@ app.post("/delete", function (req, res) {
   }
 });
 
-
-
 // EXPRESS ROUTE PARAMETERS = CUSTOM LIST NAME
 app.get("/:customListName", function(req, res){
 
@@ -159,17 +157,7 @@ app.get("/about", function (req, res) {
   res.render("about");
 });
 
-// HEROKU
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3000;
-}
-app.listen(port);
-
-
 // essentials: running server
-app.listen(port, function () {
-  console.log("Server has started successfully");
+app.listen(process.env.PORT || 3000, function () {
+  console.log("Server is running on port 3000");
 });
-
-// GIT PUSH HEROKU MAIN
