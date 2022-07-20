@@ -4,9 +4,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const _= require("lodash");
+const _ = require("lodash");
 const date = require(__dirname + "/date.js");
-
 
 const app = express();
 
@@ -15,10 +14,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // MONGOOSE CONNECT
-mongoose.connect("mongodb+srv://admin-john:test123@cluster0.aribk.mongodb.net/todolistDB", {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-});
+mongoose.connect(
+  "mongodb+srv://admin-john:test123@cluster0.aribk.mongodb.net/todolistDB",
+  {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  }
+);
 
 // ITEMS SCHEMA - MONGOOSE
 const itemSchema = mongoose.Schema({
@@ -45,7 +47,7 @@ const defautItems = [item1];
 // LIST SCHEMA
 const listSchema = {
   name: String,
-  items: [itemSchema]
+  items: [itemSchema],
 };
 
 const List = mongoose.model("List", listSchema);
@@ -69,7 +71,6 @@ app.get("/", function (req, res) {
     }
   });
 });
-
 
 // POST function for home route
 app.post("/", function (req, res) {
@@ -118,31 +119,29 @@ app.post("/delete", function (req, res) {
 });
 
 // EXPRESS ROUTE PARAMETERS = CUSTOM LIST NAME
-app.get("/:customListName", function(req, res){
-
+app.get("/:customListName", function (req, res) {
   const customListName = _.capitalize(req.params.customListName);
 
-  List.findOne({name: customListName}, function(err, foundList){
-    if(!err){
-      if(!foundList){
+  List.findOne({ name: customListName }, function (err, foundList) {
+    if (!err) {
+      if (!foundList) {
         const list = new List({
-          name: customListName, 
-          items: defautItems
+          name: customListName,
+          items: defautItems,
         });
         list.save();
         res.redirect("/" + customListName);
-      }else{
-        res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+      } else {
+        res.render("list", {
+          listTitle: foundList.name,
+          newListItems: foundList.items,
+        });
       }
     }
   });
 });
 
-
 // essentials: running server
-app.listen(process.env.PORT || 3000, function(){
+app.listen(process.env.PORT || 3000, function () {
   console.log("Server is running on port 3000");
-  });
-  
-  
-
+});
