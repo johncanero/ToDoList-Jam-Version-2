@@ -55,19 +55,18 @@ const List = mongoose.model("List", listSchema);
 // GET function for home route = mongoDB
 app.get("/", function (req, res) {
   const day = date.getDate();
-
   Item.find({}, function (err, foundItems) {
     if (foundItems.length === 0) {
-      Item.insertMany(defautItems, function (error) {
-        if (error) {
-          console.log(error);
+      Item.insertMany(defaultItems, function (err) {
+        if (err) {
+          console.log(err);
         } else {
-          console.log("Succesfully saved default items to DB.");
+          console.log("Successfully saved default items to DB.");
         }
       });
       res.redirect("/");
     } else {
-      res.render("list", { listTitle: day, newListItems: foundItems });
+      res.render("list", { listTitle: "Today", newListItems: foundItems });
     }
   });
 });
