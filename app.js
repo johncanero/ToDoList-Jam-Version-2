@@ -5,7 +5,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _= require("lodash");
-
 const date = require(__dirname + "/date.js");
 
 const app = express();
@@ -22,12 +21,12 @@ mongoose.connect("mongodb+srv://admin-john:test123@cluster0.aribk.mongodb.net/to
 });
 
 // ITEMS SCHEMA - MONGOOSE
-const itemScheme = mongoose.Schema({
+const itemSchema = mongoose.Schema({
   name: String,
 });
 
 // MONGOOSE MODEL
-const Item = mongoose.model("Item", itemScheme);
+const Item = mongoose.model("Item", itemSchema);
 
 // MONGO ITEMS
 const item1 = new Item({
@@ -46,7 +45,7 @@ const defautItems = [item1];
 // LIST SCHEMA
 const listSchema = {
   name: String,
-  items: [itemScheme]
+  items: [itemSchema]
 };
 
 const List = mongoose.model("List", listSchema);
@@ -140,21 +139,9 @@ app.get("/:customListName", function(req, res){
 });
 
 
-
-// POST function for work route
-app.post("/work", function (req, res) {
-  const item = req.body.newItem;
-  workItems.push(item);
-  res.redirect("/work");
-});
-
-// GET function for about route
-app.get("/about", function (req, res) {
-  res.render("about");
-});
-
-
 // essentials: running server
 app.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+  console.log("Server is running on port 3000");
   });
+  
+  
